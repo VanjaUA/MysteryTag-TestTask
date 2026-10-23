@@ -1,21 +1,19 @@
 #region
-
 using UnityEngine;
-
 #endregion
 
 namespace MergeGridGame.Services
 {
     public class SoundService : ISoundService
     {
-        private AudioSource _musicSource;
-        private AudioSource _sfxSource;
+        private readonly AudioSource _musicSource;
+        private readonly AudioSource _sfxSource;
 
-        private float _musicVolume = 0.3f;
-        private float _sfxVolume = 0.3f;
+        private float _musicVolume = 0.2f;
+        private float _sfxVolume = 0.2f;
 
-        private float _pitchMin = 0.9f;
-        private float _pitchMax = 1.1f;
+        private readonly float _pitchMin = 0.9f;
+        private readonly float _pitchMax = 1.1f;
 
         public SoundService(Transform audioRoot)
         {
@@ -29,7 +27,12 @@ namespace MergeGridGame.Services
 
         public void PlayMusic(AudioClip clip, bool loop = true)
         {
-            if (_musicSource.clip == clip && _musicSource.isPlaying) 
+            if (clip == null)
+            {
+                return;
+            }
+
+            if (_musicSource.clip == clip && _musicSource.isPlaying)
             {
                 return;
             }
@@ -48,6 +51,11 @@ namespace MergeGridGame.Services
 
         public void PlaySound(AudioClip clip)
         {
+            if (clip == null)
+            {
+                return;
+            }
+
             _sfxSource.pitch = Random.Range(_pitchMin, _pitchMax);
             _sfxSource.PlayOneShot(clip, _sfxVolume);
         }

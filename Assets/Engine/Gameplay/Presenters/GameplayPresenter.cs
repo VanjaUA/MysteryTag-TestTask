@@ -21,8 +21,10 @@ namespace MergeGridGame.Presenters
         private readonly int _currentLevelIndex;
         private readonly int _totalLevelsCount;
         private readonly PrefabRegistry _prefabRegistry;
+        private readonly SoundRegistry _soundRegistry;
         private readonly UIRoot _uiRoot;
         private readonly ISaveService _saveService;
+        private readonly ISoundService _soundService;
 
         private CellView[,] _cellViews;
         private ItemView[,] _itemViews;
@@ -45,8 +47,10 @@ namespace MergeGridGame.Presenters
             int currentLevelIndex,
             int totalLevelsCount,
             PrefabRegistry prefabRegistry,
+            SoundRegistry soundRegistry,
             UIRoot uiRoot,
-            ISaveService saveService)
+            ISaveService saveService,
+            ISoundService soundService)
         {
             _gridModel = gridModel;
             _screenView = screenView;
@@ -54,8 +58,10 @@ namespace MergeGridGame.Presenters
             _currentLevelIndex = currentLevelIndex;
             _totalLevelsCount = totalLevelsCount;
             _prefabRegistry = prefabRegistry;
+            _soundRegistry = soundRegistry;
             _uiRoot = uiRoot;
             _saveService = saveService;
+            _soundService = soundService;
         }
 
         public void Initialize()
@@ -142,6 +148,8 @@ namespace MergeGridGame.Presenters
                 return;
             }
 
+            _soundService.PlaySound(_soundRegistry.Get("Button"));
+
             if (!_gridModel.TryGetRandomFreeCell(out Vector2Int freeCoords))
             {
                 _screenView.PlayGeneratorShakeAnimation();
@@ -223,6 +231,8 @@ namespace MergeGridGame.Presenters
             {
                 _isTimerRunning = true;
             }
+
+            _soundService.PlaySound(_soundRegistry.Get("Merge"));
 
             _gridModel.SetItemLevel(sourceCoords, 0);
             _gridModel.SetItemLevel(targetCoords, newLevel);

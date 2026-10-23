@@ -1,5 +1,4 @@
-#region 
-
+#region
 using MergeGridGame.Core.FSM;
 using MergeGridGame.Factories;
 using MergeGridGame.ScriptableObjects;
@@ -8,7 +7,6 @@ using MergeGridGame.States;
 using MergeGridGame.UI;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 #endregion
 
 namespace MergeGridGame.Core
@@ -16,10 +14,11 @@ namespace MergeGridGame.Core
     public class GameStarter : MonoBehaviour
     {
         [SerializeField] private PrefabRegistry prefabRegistry;
-        //[SerializeField] private SoundRegistry soundRegistry;
+        [SerializeField] private SoundRegistry soundRegistry;
 
         private StateMachine _stateMachine;
         private DIContainer _diContainer;
+        private Transform _audioRoot;
 
         private void Awake()
         {
@@ -34,6 +33,8 @@ namespace MergeGridGame.Core
 
             _stateMachine = new StateMachine();
             RegisterFSMStates();
+
+            StartBackgroundMusic();
 
             _stateMachine.ChangeState<LoadingState>();
         }
@@ -55,6 +56,8 @@ namespace MergeGridGame.Core
             uiRoot.name = "[UIRoot]";
             uiRoot.Initialize(mainCamera);
 
+            _audioRoot = new GameObject("[AudioRoot]").transform;
+
             _diContainer.Register(mainCamera);
             _diContainer.Register(uiRoot);
         }
@@ -62,11 +65,9 @@ namespace MergeGridGame.Core
         private void RegisterServices()
         {
             _diContainer.Register(prefabRegistry);
-            //_diContainer.Register(soundRegistry);
-
+            _diContainer.Register(soundRegistry);
             _diContainer.Register<ISaveService>(new SaveService());
-            //_diContainer.Register<IScoreService>(new ScoreService(saveService));
-            //_diContainer.Register<ISoundService>(new SoundService(audioRoot));
+            _diContainer.Register<ISoundService>(new SoundService(_audioRoot));
         }
 
         private void RegisterFactories()
@@ -81,8 +82,13 @@ namespace MergeGridGame.Core
             _stateMachine.RegisterState<GameplayState>(new GameplayState(_stateMachine, _diContainer));
         }
 
+        private void StartBackgroundMusic()
+        {
+            ISoundService soundService = _diContainer.Resolve<ISoundService>();
+            AudioClip musicClip = soundRegistry.Get("Music");
+            soundService.PlayMusic(musicClip, loop: true);
+        }
 
-#if UNITY_EDITOR
         [ContextMenu("Clear Save Data")]
         private void ClearSaveDataFromInspector()
         {
@@ -90,6 +96,5 @@ namespace MergeGridGame.Core
             tempSaveService.ClearAll();
             Debug.Log("Save data cleared!");
         }
-#endif
     }
 }

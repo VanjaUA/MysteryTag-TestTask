@@ -17,6 +17,8 @@ namespace MergeGridGame.States
 
         private GameplayPresenter _gameplayPresenter;
         private VictoryScreenView _victoryScreenView;
+        private ISoundService _soundService;
+        private SoundRegistry _soundRegistry;
 
         public GameplayState(StateMachine fsm, DIContainer diContainer) : base(fsm, diContainer)
         {
@@ -25,8 +27,10 @@ namespace MergeGridGame.States
         public override void Enter()
         {
             PrefabRegistry prefabRegistry = _diContainer.Resolve<PrefabRegistry>();
+            _soundRegistry = _diContainer.Resolve<SoundRegistry>();
             UIRoot uiRoot = _diContainer.Resolve<UIRoot>();
             ISaveService saveService = _diContainer.Resolve<ISaveService>();
+            _soundService = _diContainer.Resolve<ISoundService>();
 
             AllLevelsConfigSO allLevelsConfig = prefabRegistry.AllLevelsConfig;
             int savedLevelIndex = saveService.LoadInt(CurrentLevelSaveKey, 0);
@@ -51,8 +55,10 @@ namespace MergeGridGame.States
                 savedLevelIndex,
                 allLevelsConfig.LevelsCount,
                 prefabRegistry,
+                _soundRegistry,
                 uiRoot,
-                saveService);
+                saveService,
+                _soundService);
 
             _gameplayPresenter.OnLevelCompleted += HandleLevelCompleted;
             _gameplayPresenter.Initialize();
@@ -83,6 +89,8 @@ namespace MergeGridGame.States
 
         private void HandleLevelCompleted(string currentTimeFormatted, string bestTimeFormatted)
         {
+            _soundService.PlaySound(_soundRegistry.Get("Victory"));
+
             PrefabRegistry prefabRegistry = _diContainer.Resolve<PrefabRegistry>();
             GameObject victoryPrefab = prefabRegistry.Get("VictoryScreenUI");
 
@@ -95,6 +103,7 @@ namespace MergeGridGame.States
 
         private void HandleNextLevelClicked()
         {
+            _soundService.PlaySound(_soundRegistry.Get("Button"));
             _fsm.ChangeState<LoadingState>();
         }
     }
