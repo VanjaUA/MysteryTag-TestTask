@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b968bc7e886bd1a4a836970aadb5f5e3, type: 3}
+  m_Name: ItemsChainConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MergeGridGame.ScriptableObjects.ItemsChainConfigSO
+  itemSprites:
+  - {fileID: 21300000, guid: ff97020a7823d49448eac82fff8cc161, type: 3}
+  - {fileID: 21300000, guid: 59ad724c610efa64aa9ee60e843934c6, type: 3}
+  - {fileID: 21300000, guid: 0f5543db979dc8b48818cd7319c2defe, type: 3}
+  - {fileID: 21300000, guid: 391b1ed77f87b9544be08da1e9c4abd1, type: 3}
+  - {fileID: 21300000, guid: 883d21c0f84e3f44aaddbee46c87f679, type: 3}
+  - {fileID: 21300000, guid: 1ae5b8458ace2d24bbc3cfb2ea8fc7c2, type: 3}
+  - {fileID: 21300000, guid: 308edd5e5bae7aa4aa6afdfe6d9186a4, type: 3}

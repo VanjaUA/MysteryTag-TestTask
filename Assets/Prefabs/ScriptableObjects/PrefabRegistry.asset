@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f15e4b84c1a4283479c592303f3c8d3c, type: 3}
+  m_Name: PrefabRegistry
+  m_EditorClassIdentifier: Assembly-CSharp::MergeGridGame.ScriptableObjects.PrefabRegistry
+  mainCameraPrefab: {fileID: 8143558049322286471, guid: 5c6dad47f849e374da2f3f33584715df, type: 3}
+  eventSystemPrefab: {fileID: 4110679259349885524, guid: 1b57e1b17c8bddb47bfa67a15fa2e873, type: 3}
+  uiRootPrefab: {fileID: 2328688957133292211, guid: a19e3abc696c1074991619d626141eaf, type: 3}
+  defaultLevelConfig: {fileID: 11400000, guid: 247320e7aa132ec48a939203f654b541, type: 2}
+  Entries:
+  - Key: LoadingScreenUI
+    Prefab: {fileID: 9059156329455936480, guid: 2290e6dbddb7d644f8b6cee5a80f6f3d, type: 3}
+  - Key: GameplayScreenUI
+    Prefab: {fileID: 303531075922971335, guid: 755f1586a7328d74c89f9de0b3d0d693, type: 3}
+  - Key: CellView
+    Prefab: {fileID: 1339183938995817090, guid: 98103fee86c65ba4d8a13c722ae58b85, type: 3}
+  - Key: ItemView
+    Prefab: {fileID: 263407568255395042, guid: bc6840feebddf6e43914916faf8e60ca, type: 3}
