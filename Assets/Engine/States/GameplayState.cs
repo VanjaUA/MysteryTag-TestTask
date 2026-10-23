@@ -4,6 +4,7 @@ using MergeGridGame.Core.FSM;
 using MergeGridGame.Models;
 using MergeGridGame.Presenters;
 using MergeGridGame.ScriptableObjects;
+using MergeGridGame.Services;
 using MergeGridGame.UI;
 using UnityEngine;
 #endregion
@@ -12,7 +13,10 @@ namespace MergeGridGame.States
 {
     public class GameplayState : State
     {
+        private const string CurrentLevelSaveKey = "CurrentLevelIndex";
+
         private GameplayPresenter _gameplayPresenter;
+        private VictoryScreenView _victoryScreenView;
 
         public GameplayState(StateMachine fsm, DIContainer diContainer) : base(fsm, diContainer)
         {
@@ -22,7 +26,17 @@ namespace MergeGridGame.States
         {
             PrefabRegistry prefabRegistry = _diContainer.Resolve<PrefabRegistry>();
             UIRoot uiRoot = _diContainer.Resolve<UIRoot>();
-            LevelConfigSO levelConfig = prefabRegistry.defaultLevelConfig;
+            ISaveService saveService = _diContainer.Resolve<ISaveService>();
+
+            AllLevelsConfigSO allLevelsConfig = prefabRegistry.AllLevelsConfig;
+            int savedLevelIndex = saveService.LoadInt(CurrentLevelSaveKey, 0);
+
+            if (savedLevelIndex >= allLevelsConfig.LevelsCount)
+            {
+                savedLevelIndex = 0;
+            }
+
+            LevelConfigSO levelConfig = allLevelsConfig.GetLevel(savedLevelIndex);
 
             GameObject screenPrefab = prefabRegistry.Get("GameplayScreenUI");
             GameObject screenObj = CreateUIInState(screenPrefab);
@@ -34,18 +48,54 @@ namespace MergeGridGame.States
                 gridModel,
                 screenView,
                 levelConfig,
+                savedLevelIndex,
+                allLevelsConfig.LevelsCount,
                 prefabRegistry,
-                uiRoot);
+                uiRoot,
+                saveService);
 
+            _gameplayPresenter.OnLevelCompleted += HandleLevelCompleted;
             _gameplayPresenter.Initialize();
+        }
+
+        public override void Update(float deltaTime)
+        {
+            _gameplayPresenter?.Update(deltaTime);
         }
 
         public override void Exit()
         {
-            _gameplayPresenter?.Dispose();
-            _gameplayPresenter = null;
+            if (_gameplayPresenter != null)
+            {
+                _gameplayPresenter.OnLevelCompleted -= HandleLevelCompleted;
+                _gameplayPresenter.Dispose();
+                _gameplayPresenter = null;
+            }
+
+            if (_victoryScreenView != null)
+            {
+                _victoryScreenView.OnNextLevelClicked -= HandleNextLevelClicked;
+                _victoryScreenView = null;
+            }
 
             base.Exit();
+        }
+
+        private void HandleLevelCompleted(string currentTimeFormatted, string bestTimeFormatted)
+        {
+            PrefabRegistry prefabRegistry = _diContainer.Resolve<PrefabRegistry>();
+            GameObject victoryPrefab = prefabRegistry.Get("VictoryScreenUI");
+
+            GameObject victoryObj = CreateUIInState(victoryPrefab);
+            _victoryScreenView = victoryObj.GetComponent<VictoryScreenView>();
+
+            _victoryScreenView.OnNextLevelClicked += HandleNextLevelClicked;
+            _victoryScreenView.Setup(currentTimeFormatted, bestTimeFormatted);
+        }
+
+        private void HandleNextLevelClicked()
+        {
+            _fsm.ChangeState<LoadingState>();
         }
     }
 }

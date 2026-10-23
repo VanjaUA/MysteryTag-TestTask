@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a15ceff84b9d734fb9d2c401192b7a5, type: 3}
+  m_Name: AllLevelsConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MergeGridGame.ScriptableObjects.AllLevelsConfigSO
+  levels:
+  - {fileID: 11400000, guid: 247320e7aa132ec48a939203f654b541, type: 2}
+  - {fileID: 11400000, guid: eb8d0915bdc58e74f8ba6b182723cd02, type: 2}
+  - {fileID: 11400000, guid: 5c701f89ed6ae39448e852705b87dc06, type: 2}

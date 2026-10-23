@@ -113,7 +113,10 @@ namespace MergeGridGame.UI
             }
 
             IsLocked = true;
-            _ = _rectTransform.DOMove(targetCell.ItemContainer.position, 0.3f)
+            _rectTransform.SetParent(_dragLayer, worldPositionStays: true);
+            _rectTransform.SetAsLastSibling();
+
+            _ = _rectTransform.DOMove(targetCell.ItemContainer.position, 0.16f)
                 .SetEase(Ease.OutQuad)
                 .OnComplete(() =>
                 {

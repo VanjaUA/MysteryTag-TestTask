@@ -21,16 +21,12 @@ namespace MergeGridGame.ScriptableObjects
     public class PrefabRegistry : ScriptableObject
     {
         [Header("Core Infrastructure")]
-        [SerializeField] private Camera mainCameraPrefab;
-        [SerializeField] private EventSystem eventSystemPrefab;
-        [SerializeField] private UIRoot uiRootPrefab;
+        public Camera MainCameraPrefab;
+        public EventSystem EventSystemPrefab;
+        public UIRoot UIRootPrefab;
 
         [Header("Configs")]
-        public LevelConfigSO defaultLevelConfig;
-
-        public Camera MainCameraPrefab => mainCameraPrefab;
-        public EventSystem EventSystemPrefab => eventSystemPrefab;
-        public UIRoot UIRootPrefab => uiRootPrefab;
+        public AllLevelsConfigSO AllLevelsConfig;
 
         public List<PrefabEntry> Entries;
 

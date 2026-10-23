@@ -64,8 +64,7 @@ namespace MergeGridGame.Core
             _diContainer.Register(prefabRegistry);
             //_diContainer.Register(soundRegistry);
 
-            SaveService saveService = new();
-            _diContainer.Register<ISaveService>(saveService);
+            _diContainer.Register<ISaveService>(new SaveService());
             //_diContainer.Register<IScoreService>(new ScoreService(saveService));
             //_diContainer.Register<ISoundService>(new SoundService(audioRoot));
         }
@@ -81,5 +80,16 @@ namespace MergeGridGame.Core
             _stateMachine.RegisterState<LoadingState>(new LoadingState(_stateMachine, _diContainer));
             _stateMachine.RegisterState<GameplayState>(new GameplayState(_stateMachine, _diContainer));
         }
+
+
+#if UNITY_EDITOR
+        [ContextMenu("Clear Save Data")]
+        private void ClearSaveDataFromInspector()
+        {
+            SaveService tempSaveService = new();
+            tempSaveService.ClearAll();
+            Debug.Log("Save data cleared!");
+        }
+#endif
     }
 }
